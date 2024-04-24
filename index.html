@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.05">
+<title>A Closer Look at Spatial-Slice Features Learning for COVID-19 Detection</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet"> <!-- Noto Sans font link here -->
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Google Sans', sans-serif;
+}
+
+
+.header h1:first-child { /* 只針對第一個 <h1> 元素 */
+    font-size: 4em; /* 增加字體大小 */
+    font-weight: bold; /* 加粗 */
+    margin-bottom: 0; /* 減少到下一個元素的距離 */
+    letter-spacing: -2px; /* 稍微減少字母間距，視覺上更加緊密 */
+}
+
+.header {
+    text-align: center; /* Center align the header */ 
+    margin: 0; /* Remove default margins */
+    padding: 10px 0; /* Add some padding for spacing */
+    font-size: 2.2em; /* Increase font size */
+}
+.authors {
+    padding: 0; /* Remove default padding */
+    margin: 20px 0; /* Add some margin for spacing */
+    font-size: 1.7em; /* Increase font size */
+}
+.author-name,
+.author-name:visited { /* 添加 :hover 来确保鼠标悬停时也没有底线 */
+    color: #4682b4;
+    text-decoration: none; /* 移除底线 */
+}
+.author-name:hover { /* 添加 :hover 来确保鼠标悬停时也没有底线 */
+    text-decoration: underline; /* 移除底线 */
+}
+.author-namenone,
+.author-namenone:visited { /* 添加 :hover 来确保鼠标悬停时也没有底线 */
+    color: #4682b4;
+    text-decoration: none; /* 移除底线 */
+}
+.author-namenone:hover { /* 添加 :hover 来确保鼠标悬停时也没有底线 */
+    text-decoration: none; /* 移除底线 */
+}
+.author {
+    display: inline;
+    margin: 0 10px;
+    margin-bottom: 30px; /* 這是標題下方的空間，根據需要調整 */
+}
+
+
+.institute {
+    margin-top: 15px; /* 這會在機構信息和作者名稱之間增加空間 */
+    font-size: 0.8em; /* 根據需要調整字體大小 */
+    color: #333; /* 文本顏色 */
+    margin-bottom: 40px; /* 這是標題下方的空間，根據需要調整 */
+}
+
+
+.conference-title {
+    text-align: center;
+    font-size: 6em;
+    font-weight: bold;
+    margin-top: 30px; /* 減少或移除這個屬性以減少空間 */
+    margin-bottom: 60px; /* 這是標題下方的空間，根據需要調整 */
+    color: #333;
+}
+
+
+
+.button-list {
+    text-align: center;
+    margin: 20px 0;
+}
+.button {
+    padding: 50px 100px; /* 增加內邊距以進一步增大按鈕 */
+    font-family: 'Noto Sans', sans-serif; 
+    font-size: 40px; /* 增加字體大小為原來的兩倍 */
+    font-weight: bold; /* 字體加粗 */
+    text-transform: uppercase; /* 文本轉為大寫 */
+    letter-spacing: 2px; /* 增加字母間距 */
+    background-color: #4A4A4A; /* 按鈕背景色 */
+    color: white; /* 文本顏色 */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 40px; /* 增加邊距以增加按鈕間的距離 */
+    border: none;
+    border-radius: 100px; /* 增加圓角 */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* 增加陰影以獲得更深的效果 */
+    transition: background-color 0.3s, box-shadow 0.3s; /* 增加過渡效果 */
+    cursor: pointer; /* 鼠標懸停時的指針形狀 */
+}
+
+.button:hover {
+    background-color: #575757; /* 鼠標懸停時的背景色 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* 鼠標懸停時的陰影 */
+}
+
+
+
+
+/* 字符和符號的顏色可能需要調整以適應背景 */
+.icon {
+    color: #D3D3D3; /* 符號的顏色 */
+    margin-right: 8px; /* 符號和文字之間的間隔 */
+}
+ 
+@media screen and (max-width: 768px) {
+  .abstract-content {
+    font-size: 1.5em; /* Larger font size on smaller screens */
+  }
+  .caption {
+    font-size: 1.5em; /* Larger font size on smaller screens */
+  }
+}
+
+
+
+
+.abstract-container {
+  background-color: transparent; /* Abstract background color */
+  padding: 20px; /* Abstract padding */
+  margin: 20px auto; /* Center the abstract container */
+  max-width: 60%; /* Control the width of the abstract container */
+
+  border: none;          /* Removes the border */
+  box-shadow: none;      /* Removes any shadow that might look like a border */
+  outline: none;         /* Removes the outline */
+}
+.abstract-title {
+  font-size: 65px; /* Title font size, adjust as needed */
+  font-weight: bold;
+  margin-bottom: 20px; /* Space below the title */
+  text-align: center;
+}
+
+.abstract-content {
+  line-height: 1.6; /* Line height for readability */
+  text-align: justify; /* Justify text for better formatting */
+  font-size: 53px; /* Content font size, adjust as needed */
+}
+
+.caption {
+  line-height: 1.6; /* Line height for readability */
+  text-align: justify; /* Justify text for better formatting */
+  font-size: 53px; /* Content font size, adjust as needed */
+
+
+}
+.bibtex-container {
+  width: 50%; /* Or whatever width you prefer */
+  height:20em;
+  margin: 0 auto; /* This will center the container */
+  padding: 5px; /* Add some padding inside the container */
+  background-color: #f8f8f8; /* A light background color */
+  border: 1px solid #e7e7e7; /* A subtle border */
+  border-radius: 4px; /* Rounded corners */
+  overflow: auto; /* To handle any overflow of content */
+  text-align: left;
+  font-size: 50px;
+  font-family: 'monospace', sans-serif;
+  line-height: 2; /* Increase line height for better readability */
+}
+
+.bibtex-title {
+  text-align: center; /* Keeps the text aligned to the left */
+  display: block; /* Ensures the title is on its own line */
+  margin-bottom: 10px; /* Space between title and BibTeX entry */
+  font-size: 60px;
+}
+
+
+.bibtex-section {
+  text-align: center; /* Center align the entire BibTeX section */
+}
+
+.additional-text {
+    text-align: center; /* Center the text */
+    margin: 20px 0; /* Add some margin above and below the text */
+    font-size: 3em; /* Adjust the font size as needed */
+}
+
+    
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>A Closer Look at Spatial-Slice Features Learning for COVID-19 Detection</h1>
+        <ul class="authors">
+            <li class="authors">
+                <a href="https://cchsu.info/wordpress/" class="author-name">Chih-Chung Hsu</a>, 
+                <a href="https://ming053l.github.io/" class="author-name">Chia-Ming Lee</a>, 
+                <span class="author-namenone">Yang Fan Chiang</span>, 
+                <span class="author-namenone">Yi-Shiuan Chou</span>, 
+                <span class="author-namenone">Chih-Yu Jiang</span>, 
+                <span class="author-namenone">Shen-Chieh Tai</span>, 
+                <span class="author-namenone">Chi-Han Tsai</span>
+                <div class="institute">Institute of Data Science, National Cheng Kung University, Taiwan</div>
+ 
+
+            </li>
+            <!-- Add more authors here -->
+        </ul>
+    </div>
+    
+    <div class="button-list">
+        <h2 class="conference-title">CVPR 2024</h2>
+        <a href="https://arxiv.org/abs/2404.01643" class="button">arXiv</a>
+        <a href="https://github.com/ming053l/E2D" class="button">Code</a>
+        <a href="https://arxiv.org/abs/2403.11230" class="button">technical report</a>
+        <!-- Add more buttons here -->
+    </div>
+
+
+<!-- Space between images -->
+<div style="height: 90px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+
+
+<figure class="abstract-container" style="margin-top: 0;"> <!-- Remove top margin to avoid double spacing -->
+  <img src="cov1.jpg" alt="Descriptive text for the image" style="width:40%; height:auto; display: block; margin: auto;">
+  <figcaption class="abstract-content" style="margin-top: 70px;">
+    The brief illustration for SSFL++. It aim to reduce redundancy in spatial and slice dimension on whole CT-scan to improve model and data quality. (1) Left: original CT-scan. (2) Middle: after reduction at spatial. (3) Right: after reduction at slices.
+  </figcaption>
+</figure>
+
+
+
+<!-- Space between images -->
+<div style="height: 70px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+
+    <!-- Abstract Section -->
+<div class="abstract-container">
+  <div class="abstract-title">Abstract</div>
+  <div class="abstract-content">
+    Conventional Computed Tomography (CT) imaging recognition faces two significant challenges: (1) There is often considerable variability in the resolution and size of each CT scan, necessitating strict requirements for the input size and adaptability of models. (2) CT-scan contains large number of out-of-distribution (OOD) slices.
+    The crucial features may only be present in specific spatial regions and slices of the entire CT scan. How can we effectively figure out where these are located? To deal
+    with this, we introduce an enhanced Spatial-Slice Feature Learning (SSFL++) framework specifically designed for CT scan. It aim to filter out a OOD data within whole
+    CT scan, enabling our to select crucial spatial-slice for analysis by reducing 70% redundancy totally. Meanwhile, we proposed Kernel-Density-based slice Sampling (KDS) method to improve the stability when training and inference stage, therefore speeding up the rate of convergence and boosting performance. As a result, the experiments demonstrate the promising performance of our model using a simple EfficientNet-2D (E2D) model, even with only 1% of the training data. The efficacy of our approach has been validated on the COVID-19-CT-DB datasets provided by the DEF-AI-MIA workshop, in conjunction with CVPR 2024.
+  </div>
+</div>
+
+<!-- Space between images -->
+<div style="height: 60px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+<figure class="abstract-container" style="margin-top: 0;">
+  <img src="cov2.jpg" alt="Descriptive text for the image" style="width:100%; height:auto; display: block; margin: auto;">
+  <figcaption class="abstract-content" style="margin-top: 60px;">
+    The GradCAM++ visualization before and after proposed SSFL++. By reducing redundancy on the spatial scale, we can implicitly enhance the visual effectiveness of Explainable AI, thereby facilitating clinical applications.
+  </figcaption>
+</figure>
+
+<!-- Space between images -->
+<div style="height: 120px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+<figure class="abstract-container" style="margin-top: 0;">
+  <img src="table.jpg" alt="Descriptive text for the image" style="width:60%; height:auto; display: block; margin: auto;">
+  <figcaption class="abstract-content" style="margin-top: 60px;">
+    The reduction in redundant data achieved by the SSFL++ module is evaluated across three dimensions: spatial, slice, and overall.This approach quantifies the efficiency of the SSFL++ module in reducing unnecessary information in CT scans, enabling more focused
+    analysis and processing. By minimizing data redundancy, the module enhances computational efficiency and potentially improves the accuracy of subsequent analyses or models applied to the CT data.
+
+  </figcaption>
+</figure>
+
+<!-- Space between images -->
+<div style="height: 120px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+
+
+<figure class="abstract-container" style="margin-top: 0;">
+  <img src="cov3.jpg" alt="Descriptive text for the image" style="width:80%; height:auto; display: block; margin: auto;">
+  <figcaption class="abstract-content" style="margin-top: 40px;">
+    The comparison between random sampling, systematic sampling, and the proposed KDS method is noteworthy. As illustrated, random sampling fails to uniformly sample CT slices of varying area sizes, tending to select larger areas while neglecting global information. This results in greater bias and randomness during training and inference. On the other hand, systematic sampling divides the area into equally lengthened sub-intervals before randomly selecting samples from them. Although this approach can capture global information, it is ineffective at sampling the most crucial CT slices. Our proposed KDS method combines the advantages of both methods without their drawbacks, achieving a better balance. KDS can implicitly improve data efficiency, thereby enhancing the model’s few-shot capability.
+  </figcaption>
+</figure>
+
+
+<!-- Space between images -->
+<div style="height: 120px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+
+<figure class="abstract-container" style="margin-top: 0;">
+  <img src="cov4.jpg" alt="Descriptive text for the image" style="width:40%; height:auto; display: block; margin: auto;">
+  <figcaption class="abstract-content" style="margin-top: 40px;">
+     CT slices from different views and body parts, as well as the results after processing through the spatial step in our proposed SSFL++, are presented. From left to right, the sequence represents the process of CT imaging, where OOD data tend to concentrate at the beginning and the end. The middle section represents the RoI area. As shown in the figure, SSFL++ performs well under various conditions.
+  </figcaption>
+</figure>
+
+
+<!-- Space between images -->
+<div style="height: 40px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+<div class="additional-text">
+    If you find our work helpful, please consider citing the following:
+</div>
+
+<!-- Space between images -->
+<div style="height: 40px;"></div> <!-- Adjust the height as needed for more or less space -->
+
+
+
+<div class="bibtex-section">
+  <h2 class="bibtex-title">BibTeX</h2>
+  <div class="bibtex-container">
+     <pre> 
+        @misc{hsu2024closer,
+              title={A Closer Look at Spatial-Slice Features Learning for COVID-19 Detection}, 
+              author={Chih-Chung Hsu and Chia-Ming Lee and Yang Fan Chiang and Yi-Shiuan Chou and Chih-Yu Jiang and Shen-Chieh Tai and Chi-Han Tsai},
+              year={2024},
+              eprint={2404.01643},
+              archivePrefix={arXiv},
+              primaryClass={eess.IV}
+
+        @misc{hsu2024simple,
+              title={Simple 2D Convolutional Neural Network-based Approach for COVID-19 Detection}, 
+              author={Chih-Chung Hsu and Chia-Ming Lee and Yang Fan Chiang and Yi-Shiuan Chou and Chih-Yu Jiang and Shen-Chieh Tai and Chi-Han Tsai},
+              year={2024},
+              eprint={2403.11230},
+              archivePrefix={arXiv},
+              primaryClass={eess.IV}
+}
+    </pre>
+  </div>
+</div>
+
+
+    <script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      var i;
+      var slides = document.getElementsByClassName("slide");
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+      }
+      slides[slideIndex-1].style.display = "flex";
+    }
+
+    // 添加自動播放功能
+    var slideInterval = setInterval(function(){ plusSlides(1); }, 4000); // 改變圖片每4秒
+
+    </script>
+
+</body>
+</html>
